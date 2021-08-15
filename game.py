@@ -1,11 +1,20 @@
 import pygame
+import random
 
-class runner():
-    pass
+class Runner():
+    def __init__(self, x=0, y=0):
+        self.custome = pygame.image.load("./runner.png")
+        self.position = (x, y)
+        self.name = "Tortuga"
+
+    def avanzar(self):
+        self.position[0] += random.randint(1, 6)
 
 class Game():
 
-    # cooredores []
+    runners = []
+    __startLine = 5
+    __finishLine = 620
 
     def __init__(self):
 
@@ -13,29 +22,28 @@ class Game():
         pygame.display.set_caption("Carrera de tortugas")
         self.background = pygame.image.load("./pista.png")
 
-        self.runner = pygame.image.load("./runner.png")
+        firstRunner= Runner(self.__startLine, 240)
+        firstRunner.name = "Speedy"
+        self.runners.append(firstRunner)
 
     def competir(self):
         
         pygame.init()
         x = 0
-        hayGanador = False
+        gameOver = False
         
-        while not hayGanador:
+
+        while not gameOver:
             # comprobación eventos
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
+                    gameOver = True
 
-            # refrescar/renderizar pantalla
             self.__screen.blit(self.background, (0, 0))
-            self.__screen.blit(self.runner, (x, 240))
+            self.__screen.blit(self.runners[0].custome, self.runners[0].position)
+            
             pygame.display.flip()
 
-            x += 3
-            if x >= 250:
-                hayGanador = True
-        
         pygame.quit()
 
 if __name__ == "__main__":
