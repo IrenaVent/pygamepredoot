@@ -1,1 +1,2 @@
 # pygamepredoot
+Kata prebootcamp Pygame
