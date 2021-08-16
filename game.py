@@ -4,7 +4,7 @@ import random
 class Runner():
     def __init__(self, x=0, y=0):
         self.custome = pygame.image.load("./runner.png")
-        self.position = (x, y)
+        self.position = [x, y]
         self.name = "Tortuga"
 
     def avanzar(self):
@@ -13,6 +13,8 @@ class Runner():
 class Game():
 
     runners = []
+    __posY = (130, 200, 270, 340)
+    __names = ("Irena", "Óscar", "Kun", "Alejandro")
     __startLine = 5
     __finishLine = 620
 
@@ -22,16 +24,17 @@ class Game():
         pygame.display.set_caption("Carrera de tortugas")
         self.background = pygame.image.load("./pista.png")
 
-        firstRunner= Runner(self.__startLine, 240)
-        firstRunner.name = "Speedy"
-        self.runners.append(firstRunner)
+        for i in range (4):
+            theRunner= Runner(self.__startLine, self.__posY[i])
+            theRunner.name = self.__names[i]
+            self.runners.append(theRunner)
+
+    def close(self):
+        pygame.quit()
 
     def competir(self):
         
-        pygame.init()
-        x = 0
         gameOver = False
-        
 
         while not gameOver:
             # comprobación eventos
@@ -39,13 +42,26 @@ class Game():
                 if event.type == pygame.QUIT:
                     gameOver = True
 
+            for activeRunner in self.runners:
+                activeRunner.avanzar()
+                if activeRunner.position[0] >= self.__finishLine:
+                    print(f"{activeRunner.name} ha ganado!")
+                    gameOver = True
+        
             self.__screen.blit(self.background, (0, 0))
-            self.__screen.blit(self.runners[0].custome, self.runners[0].position)
+            
+            for runner in self.runners:
+                self.__screen.blit(runner.custome,runner.position)
             
             pygame.display.flip()
 
-        pygame.quit()
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.close()
+
 
 if __name__ == "__main__":
+    pygame.init()
     juego = Game()
     juego.competir()
